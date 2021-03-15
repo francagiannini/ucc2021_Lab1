@@ -121,3 +121,6 @@ ggplot(salario_bruto, aes(bruto))+
   geom_step(stat="ecdf") +
   ylab("Frecuencia")+
   xlab("Salario bruto mensual")
+
+
+## demasiado por hoy
