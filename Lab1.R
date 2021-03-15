@@ -11,6 +11,7 @@
 #setwd("C:/Users/franc/Dropbox/Franca/UCAsueldossys")
 
 #librerias
+#install.packages("readxl")
 library(readxl)
 
 sueldossys <- read_excel("datos/sys2021.xlsx")
@@ -27,12 +28,11 @@ act <- table(sueldossys$`Actividad principal`)
 
 plot(act)
 
-colors = c("green3", "purple", "grey") 
+colors <- c("green3", "purple", "grey") 
 
 barplot(act, col=colors )
 
 pie(act, col = colors)
-
 
 #Segunda variable edad 
 
@@ -48,7 +48,7 @@ hist(sueldossys$Tengo)
 
 which(sueldossys$Tengo>80)
 
-sueldossys_res <- sueldossys %>% filter(Tengo < 80) %>% summarise()
+sueldossys_res <- sueldossys %>% filter(Tengo < 80)
 
 ##depuracion 
 library(tidyverse)
@@ -60,12 +60,13 @@ hist(sueldossys_dep$Tengo)
 sueldossys_dep %>%
   group_by(`Actividad principal`) %>%
   summarise(edad = mean(Tengo), 
-            sd = sd(Tengo), 
-            n=n(n))
+            sd = sd(Tengo),
+            cv = sd(Tengo)/mean(Tengo)*100,
+            n=n())
 
 #library(ggplot2)
 
-ggplot(sueldossys_dep, aes(Tengo))+
+ggplot(data=sueldossys_dep, aes(Tengo))+
   geom_histogram(binwidth = 2)+
   ylab("Frecuencia absoluta")+
   xlab("Edad")
@@ -101,21 +102,29 @@ summary(sueldossys$`Salario mensual o retiro NETO (en tu moneda local)`)
 
 hist(sueldossys$`Salario mensual o retiro NETO (en tu moneda local)`)
 
-salario_bruto <- sueldossys %>% 
+salario_neto <- sueldossys %>% 
   filter(`Salario mensual o retiro NETO (en tu moneda local)` < 400000) %>% 
-  select(`Salario mensual o retiro NETO (en tu moneda local)`) %>%
-  rename(bruto=`Salario mensual o retiro NETO (en tu moneda local)`)
+  select(c(`Salario mensual o retiro NETO (en tu moneda local)`,`Pagos en dólares`)) %>%
+  rename(neto =`Salario mensual o retiro NETO (en tu moneda local)`)
 
+salario_neto %>%
+  group_by(`Pagos en dólares`) %>% 
+  summarise(`neto media`= mean(neto), 
+            sd = sd(neto), 
+            cv = sd(neto)/mean(neto)*100,
+            n = n())  
 
-salario_bruto %>%
-  summarise(`Salario bruto medio`= mean(bruto), 
-            sd = sd(bruto), 
-            n=n())  
-
-ggplot(salario_bruto, aes(bruto))+
+ggplot(salario_neto, aes(neto, fill=`Pagos en dólares`))+
   geom_histogram(binwidth = 10000)+
   ylab("Frecuencia absoluta")+
   xlab("Salario bruto mensual")
+
+
+ggplot(salario_neto, aes(`Pagos en dólares`,neto, color=`Pagos en dólares`))+
+  geom_boxplot()+
+  ylab("salario neto")+
+  xlab("Tipo de cobro")
+
 
 ggplot(salario_bruto, aes(bruto))+
   geom_step(stat="ecdf") +
