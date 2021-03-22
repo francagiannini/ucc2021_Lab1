@@ -12,6 +12,7 @@
 
 #librerias
 #install.packages("readxl")
+
 library(readxl)
 
 sueldossys <- read_excel("datos/sys2021.xlsx")
@@ -48,9 +49,8 @@ hist(sueldossys$Tengo)
 
 which(sueldossys$Tengo>80)
 
-sueldossys_res <- sueldossys %>% filter(Tengo < 80)
-
 ##depuracion 
+
 library(tidyverse)
 
 sueldossys_dep <- sueldossys %>% filter(Tengo < 80)
@@ -59,19 +59,19 @@ hist(sueldossys_dep$Tengo)
 
 sueldossys_dep %>%
   group_by(`Actividad principal`) %>%
-  summarise(edad = mean(Tengo), 
+  summarise(edad_promedio = mean(Tengo), 
             sd = sd(Tengo),
             cv = sd(Tengo)/mean(Tengo)*100,
             n=n())
 
 #library(ggplot2)
 
-ggplot(data=sueldossys_dep, aes(Tengo))+
-  geom_histogram(binwidth = 2)+
-  ylab("Frecuencia absoluta")+
+ggplot(data=sueldossys_dep, aes(Tengo)) +
+  geom_histogram(binwidth = 2) +
+  ylab("Frecuencia absoluta") +
   xlab("Edad")
 
-ggplot(sueldossys_dep, aes(Tengo, fill=`Actividad principal`))+
+ggplot(sueldossys_dep, aes(Tengo, fill=`Actividad principal`)) +
   geom_histogram(binwidth = 2)+
   ylab("Frecuencia absoluta")+
   xlab("Edad")
@@ -103,7 +103,7 @@ summary(sueldossys$`Salario mensual o retiro NETO (en tu moneda local)`)
 hist(sueldossys$`Salario mensual o retiro NETO (en tu moneda local)`)
 
 salario_neto <- sueldossys %>% 
-  filter(`Salario mensual o retiro NETO (en tu moneda local)` < 400000) %>% 
+  filter(`Salario mensual o retiro NETO (en tu moneda local)` < 500000) %>% 
   select(c(`Salario mensual o retiro NETO (en tu moneda local)`,`Pagos en dólares`)) %>%
   rename(neto =`Salario mensual o retiro NETO (en tu moneda local)`)
 
@@ -125,11 +125,67 @@ ggplot(salario_neto, aes(`Pagos en dólares`,neto, color=`Pagos en dólares`))+
   ylab("salario neto")+
   xlab("Tipo de cobro")
 
+## función de distribución acumulada  
 
-ggplot(salario_bruto, aes(bruto))+
+salario_neto <-  salario_neto %>% 
+  mutate(dolarizado=recode(`Pagos en dólares`,.missing="No", .default="Si")) %>% 
+  filter(neto>10000)
+
+table(salario_neto$dolarizado)
+
+ggplot(salario_neto, aes(neto, fill=`dolarizado`, col=`dolarizado`))+
   geom_step(stat="ecdf") +
+  ylab("Frecuencia acumulada")+
+  xlab("Salario neto mensual")
+
+ggplot(salario_neto, aes(neto, fill=dolarizado, col=dolarizado))+
+  geom_histogram(stat = "density") +
   ylab("Frecuencia")+
-  xlab("Salario bruto mensual")
+  xlab("Salario neto mensual")
+
+## summary
+
+salario_neto %>% group_by(dolarizado) %>% 
+  summarise(neto_medio = mean(neto),
+            neto_DE = sd(neto),
+            n=n())
+
+ggplot(salario_neto, aes(dolarizado,neto, fill=dolarizado))+
+  geom_boxplot() +
+  ylab("Frecuencia")+
+  xlab("Salario neto mensual")
+
+# Para que categoría son más variables los sueldos?
+
+# Que probabilidad existe de que una persona que trabaja en la industria del software 
+# cobre un sueldo de alguna manera dolarizado?
+
+salario_neto %>% count(dolarizado)
+
+# y que cobre más de 100.000 pesos?
+
+salario_neto %>% count(neto>100000)
+
+# y que cobre más de  100.000 pesos DADO que tiene el sueldo dolarizado
+
+salario_neto %>% group_by(dolarizado) %>% count(neto>100000)
+
+# y que cobre más de  100.000 pesos DADO que NO tiene el sueldo dolarizado
+
+# A trabajar un rato solitos un rato!!! 40 min 
+
+# Consignas
+
+# Caracterizar el salario neto segun la variable Me identifico, 
+# Intentar responder si existe brecha salarial
+# calcular la probabilidad de que una persona que trabaja en la industria del software en argentina sea Mujer Cis
 
 
-## demasiado por hoy
+#Ayudita depurando
+# salario_neto_gen <- sueldossys %>% 
+#   rename(neto =`Salario mensual o retiro NETO (en tu moneda local)`) %>% 
+#   filter(neto< 500000 & neto>10000) %>% 
+#   select(c(neto,`Me identifico`)) %>% 
+#   mutate(genero = fct_lump(`Me identifico`, n = 2, other_level = "Otre"))
+
+
