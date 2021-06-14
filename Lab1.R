@@ -133,13 +133,8 @@ salario_neto <-  salario_neto %>%
 
 table(salario_neto$dolarizado)
 
-ggplot(salario_neto, aes(neto, fill=`dolarizado`, col=`dolarizado`))+
-  geom_step(stat="ecdf") +
-  ylab("Frecuencia acumulada")+
-  xlab("Salario neto mensual")
-
 ggplot(salario_neto, aes(neto, fill=dolarizado, col=dolarizado))+
-  geom_histogram(stat = "density") +
+  geom_histogram() +
   ylab("Frecuencia")+
   xlab("Salario neto mensual")
 
@@ -148,7 +143,18 @@ ggplot(salario_neto, aes(neto, fill=dolarizado, col=dolarizado))+
 salario_neto %>% group_by(dolarizado) %>% 
   summarise(neto_medio = mean(neto),
             neto_DE = sd(neto),
+            neto_CV= sd(neto)/mean(neto)*100,
+            neto_P50=median(neto),
+            Q1_P25=quantile(neto, probs=0.25),
+            Q3_P75=quantile(neto, probs=0.75),
             n=n())
+
+
+ggplot(salario_neto, aes(neto, fill=`dolarizado`, col=`dolarizado`))+
+  geom_step(stat="ecdf") +
+  ylab("Frecuencia acumulada")+
+  xlab("Salario neto mensual")
+
 
 ggplot(salario_neto, aes(dolarizado,neto, fill=dolarizado))+
   geom_boxplot() +
@@ -178,14 +184,15 @@ salario_neto %>% group_by(dolarizado) %>% count(neto>100000)
 
 # Caracterizar el salario neto segun la variable Me identifico, 
 # Intentar responder si existe brecha salarial
+
 # calcular la probabilidad de que una persona que trabaja en la industria del software en argentina sea Mujer Cis
 
-
 #Ayudita depurando
-# salario_neto_gen <- sueldossys %>% 
-#   rename(neto =`Salario mensual o retiro NETO (en tu moneda local)`) %>% 
-#   filter(neto< 500000 & neto>10000) %>% 
-#   select(c(neto,`Me identifico`)) %>% 
-#   mutate(genero = fct_lump(`Me identifico`, n = 2, other_level = "Otre"))
+
+salario_neto_gen <- sueldossys %>%
+  rename(neto =`Salario mensual o retiro NETO (en tu moneda local)`) %>%
+  filter(neto< 500000 & neto>10000) %>%
+  select(c(neto,`Me identifico`)) %>%
+  mutate(genero = fct_lump(`Me identifico`, n = 2, other_level = "Otre"))
 
 

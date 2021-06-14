@@ -1,0 +1,681 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Distribuciones en R},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Distribuciones en R}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\hypertarget{computo-de-probabilidades}{%
+\section{Computo de probabilidades}\label{computo-de-probabilidades}}
+
+Para todas las variables aleatorias que hemos mencionado hasta ahora (¡y
+muchas más!), R ha incorporado capacidades de cálculo de probabilidades.
+La sintaxis se divide en dos partes: la raíz y el prefijo. La raíz
+determina de qué variable aleatoria estamos hablando, y aquí están los
+nombres de las que hemos cubierto hasta ahora:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{binom} binomial
+\item
+  \texttt{geom} geometrica
+\item
+  \texttt{pois} Poisson
+\item
+  \texttt{unif} uniforme
+\item
+  \texttt{exp} nexponencial
+\item
+  \texttt{norm} normal
+\end{itemize}
+
+Y los prefijos disponibles son los siguientes:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{p} computa la \textbf{distribución acumulada}
+\item
+  \texttt{d} computa la \textbf{distribución de probabilidad} o
+  \textbf{distribución de densidad}\\
+\item
+  \texttt{r} muestrea
+\item
+  \texttt{q} es la distribución cuantil
+\end{itemize}
+
+Por el momento nos vamos a enfocar en \texttt{p} y \texttt{d}
+
+Por ejemplo si \(X\) es una variable aleatoria que se distribuye
+binomial con \(n=10\) y \(p=0.3\) y queremos computar \(P(X=5)\)
+entonces:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1029193
+\end{verbatim}
+
+Recordemos que siempre podemos pedir la ayuda de la función para ver
+cuales son sus parámetros
+
+Si queremos ahora calcular \(P(1\leqslant X \leqslant 5)\) podemos
+hacerlo de dos maneras:
+
+\emph{Opción 1}
+
+\[P(X = 1) + P(X = 2) + P(X = 3) + P(X = 4) + P(X = 5)\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{dbinom}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{dbinom}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{dbinom}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{dbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9244035
+\end{verbatim}
+
+Para no volvernos viejos tan rápido podemos usar la opción de
+\texttt{dbinom} también permite vectores como argumentos, por lo que
+podemos calcular todas las probabilidades necesarias de esta manera:
+
+\emph{Opción 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1210608 0.2334744 0.2668279 0.2001209 0.1029193
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{dbinom}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{ , }\FloatTok{0.3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9244035
+\end{verbatim}
+
+\hypertarget{algunos-ejemplos-con-covid-19}{%
+\subsection{Algunos ejemplos con COVID
+19}\label{algunos-ejemplos-con-covid-19}}
+
+Para comenzar vamos a obtener una serie de datos de la página oficial de
+la OMS o \href{https://covid19.who.int/info}{WHO}
+
+Vamos a tratar de responder algunos interrogantes respecto a la
+incidencia de la enfermedad
+
+Trabajaremos con los datos totales y de los últimos 7 días, debemos
+elegir Argentina y un país de cada region
+
+Definimos Prevalencia como la proporción de individuos de un grupo o una
+población (en medicina, persona), que presentan una característica o
+evento determinado (en medicina, enfermedades). Por lo general, se
+expresa como una fracción, un porcentaje o un número de casos por cada
+10 000 o 100.000 personas.
+
+Mientras que la incidencia es el número de casos nuevos de una
+enfermedad en una población determinada y en un periodo determinado.
+
+Definimos la Incidencia para un periodo de tiempo dado como:
+
+\[Incidencia= \frac{numero.de.personas.enfermas}{numero.de.habitantes}\]
+
+La prevalencia es un término que significa estar extendido y es distinto
+de la incidencia .
+
+La prevalencia es una medida de todos los individuos (casos) afectados
+por la enfermedad en un momento determinado, mientras que la incidencia
+es una medida del número de nuevos individuos (casos) que contraen una
+enfermedad durante un período de tiempo particular.
+
+La prevalencia responde a ``¿Cuántas personas tienen esta enfermedad en
+este momento?'' o ``¿Cuántas personas han tenido esta enfermedad durante
+este período de tiempo?''. La incidencia responde a ``¿Cuántas personas
+adquirieron la enfermedad durante un período de tiempo específico?''.
+Sin embargo, matemáticamente, la prevalencia es proporcional al producto
+de la incidencia y la duración promedio de la enfermedad.
+
+\[ Prevalencia  = Incidencia* duración\]
+
+¿Cuál es la probabilidad de que una persona contraiga la enfermdad en
+los últimos 7 días?
+
+Asumimos una distribución Bernoulli o binomial con n=1
+
+\[P(X=x)=p^x (1-p)^{(n-x)}\] con
+
+\[𝑥={0,1}\]
+
+Aqui \(p\) tomará el valor de la incidencia media y \(x\) sera 1
+
+Entonces por ejemplo para el mundo con una incidencia de
+\(\frac{58.848}{100000}=0.00058848\) :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\AttributeTok{x=}\DecValTok{1}\NormalTok{, }\AttributeTok{size=}\DecValTok{1}\NormalTok{, }\AttributeTok{prob=}\FloatTok{58.848}\SpecialCharTok{/}\DecValTok{100000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.00058848
+\end{verbatim}
+
+Obviamente observando la formula podiamos darnos cuenta que ese valor
+iba a ser igual a \(p\)
+
+¿Ahora, cuál es la probabilidad de que un integrante de una burbuja de
+15 personas contraiga la enfermdad en los últimos 7 días?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\AttributeTok{x=}\DecValTok{1}\NormalTok{, }\AttributeTok{size=}\DecValTok{15}\NormalTok{, }\AttributeTok{prob=}\NormalTok{(}\FloatTok{58.848}\SpecialCharTok{/}\DecValTok{100000}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.008754753
+\end{verbatim}
+
+y dos?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dbinom}\NormalTok{(}\AttributeTok{x=}\DecValTok{2}\NormalTok{, }\AttributeTok{size=}\DecValTok{15}\NormalTok{, }\AttributeTok{prob=}\FloatTok{58.848}\SpecialCharTok{/}\DecValTok{100000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.608521e-05
+\end{verbatim}
+
+¿Qué pasa en Argentina y en los paises seleccionados de cada región?
+
+Comparar en Argentina \(p\) total, de los ultimos 7 días y de las
+últimas 24 hs.
+
+\hypertarget{variables-continuas}{%
+\subsection{Variables continuas}\label{variables-continuas}}
+
+Ahora, siendo \(X\) una v.a. de media 1 (\(\mu=1\)) y desvío estandar 5
+(\(\sigma = 5\)) y queremos calcular \(P(X\leqslant 1)\)
+
+Como se trata de una distribución de variables continuas es complejo
+calcular probabilidades como el ejemplo anterior, aquí tenemos que
+integrar. Entoncess:
+
+\[\int_{-\infty}^1 {\text { N(x, 1, 5)}} \, dx\] Pero, la probabilidad
+que estamos tratando de calcular podemos computarla a traves de \(F(x)\)
+usando \texttt{pnorm}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pnorm}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5
+\end{verbatim}
+
+Si queremos calcular \(P(1 \le X \le 5)\) Aquí, calculamos la
+probabilidad de que \(X\) sea menor o igual a cinco, y restamos la
+probabilidad de que \(X\) sea menor que 1. Que es lo mismo que:
+
+\[P(X \le 5) - P(X \le 1) \]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pnorm}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{) }\SpecialCharTok{{-}} \FunctionTok{pnorm}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2881446
+\end{verbatim}
+
+\emph{Ejemplo}
+
+Debemos elegir siete mujeres al azar de una universidad para formar una
+versión inicial de un video juego de basquet femenino. Las alturas de
+las mujeres en se distribuyen normalmente con una media de 163.83 cm y
+una desviación estándar de 5.715 cm. ¿Cuál es la probabilidad de que 3 o
+más de las mujeres midan 172.72 cm o más?
+
+Para computar esta probabilidad, primero determinamos la probabilidad de
+que una sola mujer seleccionada al azar mida 172.72 cm o más alta. Sea
+\(X\) una variable aleatoria normal con media 162.56 y desviación
+estándar 5.715. Calculamos \(P(X \ge 172.72)\) usando \texttt{pnorm}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pnorm}\NormalTok{(}\FloatTok{172.72}\NormalTok{, }\FloatTok{162.56}\NormalTok{, }\FloatTok{5.715}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.03772018
+\end{verbatim}
+
+Ahora, tenemos que calcular la probabilidad de que 3 o más de las 7
+mujeres midan 172.72 cm o más. Dado que la población de todas las
+mujeres en una universidad es mucho mayor que 7, el número de mujeres en
+la configuracón inicial que tienen 172.72 cm o más es binomial con
+\(n = 7\) y \(0.03772018\), que calculamos en el paso anterior.
+Entonces, calculamos la probabilidad de que al menos 3 mujeres midan
+172.72 cm como:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{dbinom}\NormalTok{(}\DecValTok{3}\SpecialCharTok{:}\DecValTok{7}\NormalTok{, }\DecValTok{7}\NormalTok{, }\FloatTok{0.03772018}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.001675265
+\end{verbatim}
+
+Por lo tanto, hay aproximadamente un \(0.17\) por ciento de
+posibilidades de que al menos tres mujeres midan 172.72 cm o más.
+
+\pagebreak
+
+\emph{Graficar funciones con ggplot2}
+
+Para graficar la función de densidad del ejemplo anterior, vamos a
+generar una serie de datos (vector) de datos con los valores de \(x\) y
+los valores de \(y\) que queremos representar (usando la función
+\texttt{dnorm()}) y a partir de ese vector vamos a graficar usando
+\texttt{geom\_line()}, de la siguiente manera.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\NormalTok{xvals }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{120}\NormalTok{,}\DecValTok{200}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\NormalTok{plotdata }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ xvals, }\AttributeTok{y =} \FunctionTok{dnorm}\NormalTok{(xvals, }\FloatTok{162.56}\NormalTok{, }\FloatTok{5.715}\NormalTok{))}
+\FunctionTok{ggplot}\NormalTok{(plotdata, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x=}\StringTok{"altura (cm)"}\NormalTok{, }\AttributeTok{y=} \StringTok{"f(x)"}\NormalTok{, }\AttributeTok{title=}\StringTok{"Distribución Normal(162.56, 5.715)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\pagebreak
+
+De la misma manera si se trata de una distribución binomial
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xvals }\OtherTok{\textless{}{-}} \DecValTok{0}\SpecialCharTok{:}\DecValTok{7}
+\NormalTok{plotdata }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ xvals, }\AttributeTok{y =} \FunctionTok{dbinom}\NormalTok{(xvals, }\DecValTok{7}\NormalTok{, }\FloatTok{0.03772018}\NormalTok{))}
+\FunctionTok{ggplot}\NormalTok{(plotdata, }\FunctionTok{aes}\NormalTok{(x, y)) }\SpecialCharTok{+} \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x=}\StringTok{"altura (cm)"}\NormalTok{, }\AttributeTok{y=} \StringTok{"f(X)"}\NormalTok{, }\AttributeTok{title=}\StringTok{"Distribución Binomial(7; 0,037)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\emph{Otras opciones para variables continuas }
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{curve}\NormalTok{(}\FunctionTok{dgamma}\NormalTok{(x, }\AttributeTok{scale=}\FloatTok{1.5}\NormalTok{, }\AttributeTok{shape=}\DecValTok{2}\NormalTok{),}\AttributeTok{from=}\DecValTok{0}\NormalTok{, }\AttributeTok{to=}\DecValTok{15}\NormalTok{, }\AttributeTok{main=}\StringTok{"distribución Gamma"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{curve}\NormalTok{(}\FunctionTok{dunif}\NormalTok{(x,}\AttributeTok{min=}\DecValTok{0}\NormalTok{,}\AttributeTok{max=}\DecValTok{10}\NormalTok{),}\AttributeTok{from=}\DecValTok{0}\NormalTok{,}\AttributeTok{to=}\DecValTok{10}\NormalTok{, }\AttributeTok{main=}\StringTok{"distribución uniforme"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-13-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{curve}\NormalTok{(}\FunctionTok{dnorm}\NormalTok{(x,}\AttributeTok{m=}\DecValTok{10}\NormalTok{,}\AttributeTok{sd=}\DecValTok{2}\NormalTok{),}\AttributeTok{from=}\DecValTok{0}\NormalTok{,}\AttributeTok{to=}\DecValTok{20}\NormalTok{,}\AttributeTok{main=}\StringTok{"distribución Normal"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-13-3.pdf}
+
+\emph{Ejemplo Salario neto mensual}
+
+Veamos el comportamiento de la variable salario neto
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(salario\_neto\_gen)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##     neto `Me identifico` genero   
+##    <dbl> <chr>           <fct>    
+## 1  90000 Varón Cis       Varón Cis
+## 2 109000 Varón Cis       Varón Cis
+## 3  39259 Varón Cis       Varón Cis
+## 4  91713 Varón Cis       Varón Cis
+## 5 137700 Varón Cis       Varón Cis
+## 6  38500 Varón Cis       Varón Cis
+\end{verbatim}
+
+Función de densidad
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{density}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto), }\AttributeTok{main=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{5}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{\textquotesingle{}Salario\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}Densidad\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+Con ggplot2 por genero
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(salario\_neto\_gen, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{neto)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{group=}\NormalTok{genero, }\AttributeTok{fill=}\NormalTok{genero), }\AttributeTok{alpha=}\FloatTok{0.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+Función de distribución acumulada
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{F }\OtherTok{\textless{}{-}} \FunctionTok{ecdf}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto)}
+\FunctionTok{plot}\NormalTok{(F, }\AttributeTok{main=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab=}\StringTok{\textquotesingle{}Peso (Kg)\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}F(x)\textquotesingle{}}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.5}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+Con ggplot2 por genero
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(salario\_neto\_gen, }\FunctionTok{aes}\NormalTok{(neto, }\AttributeTok{fill=}\NormalTok{genero, }\AttributeTok{col=}\NormalTok{genero))}\SpecialCharTok{+}
+  \FunctionTok{geom\_step}\NormalTok{(}\AttributeTok{stat=}\StringTok{"ecdf"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Frecuencia acumulada"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Salario neto mensual"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+Calcular la probabilidad de que una persona de la industria del software
+cobre un sueldo inferior al salario minimo vital y movil.
+
+SMVM = 21600
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{F}\NormalTok{(}\DecValTok{21600}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01651572
+\end{verbatim}
+
+\hypertarget{tcl}{%
+\section{TCL}\label{tcl}}
+
+\hypertarget{media-muestral-del-salario}{%
+\subsection{Media muestral del
+salario}\label{media-muestral-del-salario}}
+
+Ahora muestreamos 10 individuos y calculamos la media del salario sobre
+esos 10 individuos
+
+Muestreo una vez una muestra de tamaño 10
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{muestra\_size10\_1 }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto, }\AttributeTok{size=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Calculo la media
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(muestra\_size10\_1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 81075.9
+\end{verbatim}
+
+Repito el proceso 100 veces
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{medias\_muestrales }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FunctionTok{mean}\NormalTok{(}\FunctionTok{sample}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto, }\AttributeTok{size=}\DecValTok{10}\NormalTok{)))}
+
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{density}\NormalTok{(medias\_muestrales), }\AttributeTok{main=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{5}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{\textquotesingle{}Media muestral Salario n=10 replicas=100\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}Densidad\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 100781.6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 19644.05
+\end{verbatim}
+
+Ahora lo repito 1000 veces y 100000 veces
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{medias\_muestrales }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\FunctionTok{mean}\NormalTok{(}\FunctionTok{sample}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto, }\AttributeTok{size=}\DecValTok{10}\NormalTok{)))}
+
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{density}\NormalTok{(medias\_muestrales), }\AttributeTok{main=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{5}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{\textquotesingle{}Media muestral Salario n=10 replicas=1000\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}Densidad\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 101533.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 19781.88
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{medias\_muestrales }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\FunctionTok{mean}\NormalTok{(}\FunctionTok{sample}\NormalTok{(salario\_neto\_gen}\SpecialCharTok{$}\NormalTok{neto, }\AttributeTok{size=}\DecValTok{10}\NormalTok{)))}
+
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{density}\NormalTok{(medias\_muestrales), }\AttributeTok{main=}\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{5}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{\textquotesingle{}Media muestral Salario n=10 replicas=100000\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}Densidad\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{distribuciones_files/figure-latex/unnamed-chunk-24-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 102212.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(medias\_muestrales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 19960.34
+\end{verbatim}
+
+Repetir el proceso para un tamaño mestral de 20 y un tamaño mestral de
+100, calculando media y desvio estandar para cada caso. Construir una
+tabla y concluir.
+
+\end{document}
